@@ -1,7 +1,12 @@
-from flask import Blueprint, jsonify
+from flask_restx import Namespace, Resource
 
-auth_bp = Blueprint("auth", __name__)
+auth_ns = Namespace(
+    "auth",
+    description="Authentication and access control"
+)
 
-@auth_bp.get("/")
-def index():
-    return jsonify({"modulo": "auth", "status": "ok"}), 200
+@auth_ns.route("/")
+class AuthIndex(Resource):
+    @auth_ns.doc("auth_index")
+    def get(self):
+        return {"module": "auth", "status": "ok"}, 200

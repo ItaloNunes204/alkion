@@ -1,9 +1,12 @@
-from flask import Blueprint, jsonify
-from flask_jwt_extended import jwt_required
+from flask_restx import Namespace, Resource
 
-sync_bp = Blueprint("sync", __name__)
+sync_ns = Namespace(
+    "sync",
+    description="Offline sync for mobile and desktop"
+)
 
-@sync_bp.get("/")
-@jwt_required()
-def index():
-    return jsonify({"modulo": "sync", "status": "ok"}), 200
+@sync_ns.route("/")
+class SyncIndex(Resource):
+    @sync_ns.doc("sync_index")
+    def get(self):
+        return {"module": "sync", "status": "ok"}, 200
