@@ -1,0 +1,49 @@
+services:
+    # ── Banco de dados PostgreSQL ──────────────────────────────
+    # Guarda todos os dados do sistema: usuários, vendas, estoque, etc.
+    postgres:
+        image: postgres:16-alpine
+        container_name: alkion_postgres
+        environment:
+            POSTGRES_USER: alkion
+            POSTGRES_PASSWORD: alkion
+            POSTGRES_DB: alkion_dev
+        volumes:
+            # Persiste os dados mesmo se o container for removido
+            - postgres_data:/var/lib/postgresql/data
+            # Script que roda na primeira vez que o banco sobe
+            - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+        ports:
+            # porta_do_seu_pc:porta_do_container
+            - "5432:5432"
+        networks:
+            - alkion_net
+        # Reinicia automaticamente se cair
+        restart: unless-stopped
+
+    # ── Redis ──────────────────────────────────────────────────
+    # Cache em memória e fila de tarefas do Celery
+    redis:
+        image: redis:7-alpine
+        container_name: alkion_redis
+        command: redis-server --appendonly yes
+        volumes:
+            # Persiste os dados do Redis no disco
+            - redis_data:/data
+        ports:
+            - "6379:6379"
+        networks:
+            - alkion_net
+        restart: unless-stopped
+
+# ── Volumes persistentes ───────────────────────────────────────
+# Os dados ficam salvos mesmo se os containers forem removidos
+volumes:
+    postgres_data:
+    redis_data:
+
+# ── Rede interna ───────────────────────────────────────────────
+# Os containers se comunicam entre si por esta rede
+networks:
+    alkion_net:
+        driver: bridge
