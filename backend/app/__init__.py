@@ -56,6 +56,7 @@ def _register_namespaces():
     from .modules.order.routes      import order_ns
     from .modules.erp.routes        import erp_ns
     from .modules.plans.routes      import plans_ns
+    from .modules.companies.routes import companies_ns
 
     namespaces = [
         (auth_ns,        "/api/v1/auth"),
@@ -76,6 +77,7 @@ def _register_namespaces():
         (order_ns,       "/api/v1/orders"),
         (erp_ns,         "/api/v1/erp"),
         (plans_ns,       "/api/v1/plans"),
+        (companies_ns,   "/api/v1/companies"),
     ]
 
     for ns, path in namespaces:
