@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_restx import Api
+from flask_cors import CORS
 from dotenv import load_dotenv
 
 from .core.config import config_by_name
@@ -12,7 +13,7 @@ load_dotenv()
 api = Api(
     title="Alkion API",
     version="1.0.0",
-    description="API REST do sistema de gestão Alkion",
+    description="API REST do sistema de gestao Alkion",
     doc="/docs",
 )
 
@@ -20,6 +21,8 @@ api = Api(
 def create_app(config_name: str = "development") -> Flask:
     app = Flask(__name__)
     app.config.from_object(config_by_name[config_name])
+
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -52,6 +55,7 @@ def _register_namespaces():
     from .modules.promotions.routes import promotions_ns
     from .modules.order.routes      import order_ns
     from .modules.erp.routes        import erp_ns
+    from .modules.plans.routes      import plans_ns
 
     namespaces = [
         (auth_ns,        "/api/v1/auth"),
@@ -71,6 +75,7 @@ def _register_namespaces():
         (promotions_ns,  "/api/v1/promotions"),
         (order_ns,       "/api/v1/orders"),
         (erp_ns,         "/api/v1/erp"),
+        (plans_ns,       "/api/v1/plans"),
     ]
 
     for ns, path in namespaces:

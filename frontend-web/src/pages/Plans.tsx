@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 
-// Tipo que representa um plano vindo do backend
 interface Plan {
     id: number;
     name: string;
@@ -18,8 +17,7 @@ export default function Plans() {
     const [error, setError] = useState("");
 
     useEffect(() => {
-        // Busca os planos do backend quando a página carrega
-        api.get("/api/v1/plans")
+        api.get("/api/v1/plans/")
             .then((response) => {
                 setPlans(response.data);
             })

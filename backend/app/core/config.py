@@ -13,7 +13,7 @@ class DevelopmentConfig(BaseConfig):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL",
-        "postgresql://alkion:alkion@localhost:5432/alkion_dev"
+        "postgresql+psycopg://alkion:alkion@localhost:5432/alkion_dev"
     )
     SQLALCHEMY_ECHO = True
 
