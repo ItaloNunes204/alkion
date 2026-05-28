@@ -1,7 +1,7 @@
 from app.core.extensions import db
 from datetime import datetime
 
-
+# Models for subscription plans
 class Plan(db.Model):
     __tablename__ = "plans"
 
@@ -13,7 +13,7 @@ class Plan(db.Model):
     max_stores    = db.Column(db.Integer, nullable=False)
     max_users     = db.Column(db.Integer, nullable=False)
     is_active     = db.Column(db.Boolean, default=True)
-    is_highlighted = db.Column(db.Boolean, default=False)
+    is_public = db.Column(db.Boolean, default=False)
     created_at    = db.Column(db.DateTime, default=datetime.utcnow)
     modified_at   = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -26,7 +26,7 @@ class Plan(db.Model):
             "annual_price":  float(self.annual_price),
             "max_stores":    self.max_stores,
             "max_users":     self.max_users,
-            "is_highlighted": self.is_highlighted,
+            "is_public": self.is_public,
             "created_at":    self.created_at,
             "modified_at":   self.modified_at,
         }

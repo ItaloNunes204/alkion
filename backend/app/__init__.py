@@ -10,14 +10,24 @@ from .core.middleware import register_middlewares
 
 load_dotenv()
 
+# API configuration
 api = Api(
     title="Alkion API",
     version="1.0.0",
     description="API REST do sistema de gestao Alkion",
     doc="/docs",
+
+    authorizations={
+        "Bearer": {
+            "type": "apiKey",
+            "in": "header",
+            "name": "Authorization",
+            "description": "Informe: Bearer <seu_token>",
+        }
+    },
 )
 
-
+# Application factory
 def create_app(config_name: str = "development") -> Flask:
     app = Flask(__name__)
     app.config.from_object(config_by_name[config_name])
@@ -37,6 +47,7 @@ def create_app(config_name: str = "development") -> Flask:
     return app
 
 
+# Register API namespaces(modules)
 def _register_namespaces():
     from .modules.auth.routes       import auth_ns
     from .modules.sync.routes       import sync_ns
@@ -58,6 +69,9 @@ def _register_namespaces():
     from .modules.plans.routes      import plans_ns
     from .modules.companies.routes import companies_ns
     from .modules.permissions.routes import permissions_ns
+    from .modules.roles.routes import roles_ns
+    from .modules.stores.routes import stores_ns
+    from .modules.users.routes import users_ns
 
     namespaces = [
         (auth_ns,        "/api/v1/auth"),
@@ -80,6 +94,9 @@ def _register_namespaces():
         (plans_ns,       "/api/v1/plans"),
         (companies_ns,   "/api/v1/companies"),
         (permissions_ns, "/api/v1/permissions"),
+        (roles_ns,       "/api/v1/roles"),
+        (stores_ns,      "/api/v1/stores"),
+        (users_ns,       "/api/v1/users"),
     ]
 
     for ns, path in namespaces:

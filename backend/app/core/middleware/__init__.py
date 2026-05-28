@@ -9,7 +9,7 @@ def register_middlewares(app):
     def iniciar_request():
         g.start_time = time.time()
 
-        cliente = request.headers.get("X-Client-Type", "web").lower()
+        cliente = request.headers.get("X-Client-Type", "").lower()
 
         if cliente not in CLIENTES_VALIDOS:
             return jsonify({
@@ -20,8 +20,8 @@ def register_middlewares(app):
 
     @app.after_request
     def finalizar_request(response):
-        duracao = time.time() - getattr(g, "start_time", time.time())
-        response.headers["X-Response-Time"]      = f"{duracao:.4f}s"
+        duration = time.time() - getattr(g, "start_time", time.time())
+        response.headers["X-Response-Time"]      = f"{duration:.4f}s"
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-Frame-Options"]        = "DENY"
         return response

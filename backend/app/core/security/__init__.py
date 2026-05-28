@@ -2,6 +2,7 @@ from functools import wraps
 from flask import jsonify, g
 from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
 
+# Decorations for route protection based on permissions and client types
 def requer_permissao(codigo: str):
     def decorator(fn):
         @wraps(fn)
@@ -20,7 +21,7 @@ def requer_permissao(codigo: str):
         return wrapper
     return decorator
 
-
+# Decorations for route protection based on client types (e.g., web, mobile, admin)
 def requer_cliente(*clientes_permitidos: str):
     def decorator(fn):
         @wraps(fn)
@@ -37,6 +38,6 @@ def requer_cliente(*clientes_permitidos: str):
         return wrapper
     return decorator
 
-
+# Decorations for route protection based on specific client types
 def requer_admin():
     return requer_cliente("admin")
